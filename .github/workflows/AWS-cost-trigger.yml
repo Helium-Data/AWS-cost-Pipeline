@@ -1,0 +1,43 @@
+name: Extract and Load Billing Data
+
+env:
+  AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+  AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+  BUCKET_NAME: ${{secrets.BUCKET_NAME}}
+  GCP_CREDENTIALS_BASE64: ${{secrets.HELIUM_HEALTH_CREDS}}
+  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+on:
+  schedule:
+    - cron: '0 12 * * *'  # Runs at 12 noon
+  workflow_dispatch:
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: |
+          pip install --no-cache-dir -r requirements.txt
+
+      - name: Decode Google Credentials
+        run: echo "$GCP_CREDENTIALS_BASE64" | base64 --decode | jq > heliumhealth-1ce77f433fc7.json
+
+      - name: Run Pipeline Script
+        run: python aws-cost.py
+
+      - name: Send Slack Notification
+        uses: act10ns/slack@v2
+        with:
+          status: ${{ job.status }}
+          steps: ${{ toJson(steps) }}
+          channel: '#helium-data-engineering'
+        if: always()
