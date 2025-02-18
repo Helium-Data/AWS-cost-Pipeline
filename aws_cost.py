@@ -93,9 +93,9 @@ def main(aws_access_key_id, aws_secret_access_key, bucket_name, report_date, gcp
 # dates = ["01"]
 # for days in dates:
 main(
-    aws_access_key_id= os.getenv("AWS_ACCESS_KEY_ID")# config.aws_access_key_id,
-    aws_secret_access_key= os.getenv("AWS_SECRET_ACCESS_KEY")#config.aws_secret_access_key,
-    bucket_name= os.getenv("BUCKET_NAME")  #config.bucket_name,
+    aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID") # config.aws_access_key_id,
+    aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY") #config.aws_secret_access_key,
+    bucket_name=os.getenv("BUCKET_NAME")  #config.bucket_name,
     report_date=(datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y%m%d"),
     # report_date='202502' + days, #-- Use this to log backlogs
     gcp_keyfile_path='heliumhealth-1ce77f433fc7.json'
