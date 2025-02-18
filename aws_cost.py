@@ -7,7 +7,6 @@ import os
 # from datetime import datetime, timedelta
 import datetime
 from google.cloud import bigquery
-import config
 
 
 def get_date_range():
