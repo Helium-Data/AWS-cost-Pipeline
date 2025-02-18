@@ -32,7 +32,7 @@ jobs:
         run: echo "$GCP_CREDENTIALS_BASE64" | base64 --decode | jq > heliumhealth-1ce77f433fc7.json
 
       - name: Run Pipeline Script
-        run: python aws-cost.py
+        run: python aws_cost.py
 
       - name: Send Slack Notification
         uses: act10ns/slack@v2
